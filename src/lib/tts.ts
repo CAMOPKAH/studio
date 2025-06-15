@@ -23,7 +23,7 @@ export function speak(text: string, lang: string = 'ru-RU'): Promise<void> {
       
       utterance.onend = () => resolve();
       utterance.onerror = (event) => {
-        console.error("TTS Error:", event);
+        console.error("TTS Error:", event.error || "UNKNOWN_TTS_ERROR");
         reject(new Error(event.error || "UNKNOWN_TTS_ERROR"));
       };
       
