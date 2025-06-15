@@ -1,3 +1,4 @@
+
 export function speak(text: string, lang: string = 'ru-RU'): Promise<void> {
   return new Promise((resolve, reject) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -23,8 +24,14 @@ export function speak(text: string, lang: string = 'ru-RU'): Promise<void> {
       
       utterance.onend = () => resolve();
       utterance.onerror = (event) => {
-        console.error("TTS Error:", event.error || "UNKNOWN_TTS_ERROR");
-        reject(new Error(event.error || "UNKNOWN_TTS_ERROR"));
+        if (event.error === 'interrupted') {
+          // Log as a warning, but resolve as this is often due to a new speak call quickly following.
+          console.warn("TTS: Utterance interrupted, likely by a new speak call. Resolving as non-fatal.");
+          resolve(); 
+        } else {
+          console.error("TTS Error:", event.error || "UNKNOWN_TTS_ERROR");
+          reject(new Error(event.error || "UNKNOWN_TTS_ERROR"));
+        }
       };
       
       window.speechSynthesis.speak(utterance);
