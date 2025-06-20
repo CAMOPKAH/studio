@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Animal } from '@/types';
@@ -9,15 +10,17 @@ interface AnimalCardProps {
   onClick: (animal: Animal) => void;
   disabled?: boolean;
   highlight?: boolean;
+  isFullscreen?: boolean;
 }
 
-export function AnimalCard({ animal, onClick, disabled = false, highlight = false }: AnimalCardProps) {
+export function AnimalCard({ animal, onClick, disabled = false, highlight = false, isFullscreen = false }: AnimalCardProps) {
   return (
     <Card
       className={cn(
-        "cursor-pointer hover:shadow-lg transition-shadow select-none",
+        "cursor-pointer hover:shadow-lg transition-all duration-300 select-none",
         disabled && "opacity-50 cursor-not-allowed",
         highlight && "ring-4 ring-accent shadow-accent",
+        isFullscreen ? "scale-125" : "scale-100",
       )}
       onClick={() => !disabled && onClick(animal)}
       aria-label={animal.name}

@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Animal } from '@/types';
@@ -8,9 +9,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Level1Props {
   animals: Animal[];
+  isFullscreen?: boolean;
 }
 
-export function Level1({ animals }: Level1Props) {
+export function Level1({ animals, isFullscreen = false }: Level1Props) {
   const { toast } = useToast();
 
   const handleAnimalClick = async (animal: Animal) => {
@@ -28,14 +30,14 @@ export function Level1({ animals }: Level1Props) {
       });
     }
   };
-
+    
   return (
-    <div className="w-full max-w-4xl">
-      <h2 className="text-3xl font-headline mb-6 text-center text-primary">Уровень 1: Изучаем животных</h2>
-      <ScrollArea className="h-[calc(100vh-250px)]">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
+    <div className="w-full max-w-4xl flex flex-col items-center flex-grow">
+       <h2 className="text-3xl font-headline mb-6 text-center text-primary">Уровень 1: Изучаем животных</h2>
+      <ScrollArea className="w-full h-full flex-grow">
+        <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 p-4 ${isFullscreen ? 'gap-8' : 'gap-4'}`}>
           {animals.map((animal) => (
-            <AnimalCard key={animal.id} animal={animal} onClick={handleAnimalClick} />
+            <AnimalCard key={animal.id} animal={animal} onClick={handleAnimalClick} isFullscreen={isFullscreen} />
           ))}
         </div>
       </ScrollArea>

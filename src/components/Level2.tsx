@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
@@ -11,11 +12,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Level2Props {
   animals: Animal[];
+  isFullscreen?: boolean;
 }
 
 const QUIZ_OPTIONS_COUNT = 4;
 
-// Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -25,7 +26,7 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export function Level2({ animals }: Level2Props) {
+export function Level2({ animals, isFullscreen = false }: Level2Props) {
   const { toast } = useToast();
   const [currentChallengeAnimal, setCurrentChallengeAnimal] = useState<Animal | null>(null);
   const [quizOptions, setQuizOptions] = useState<Animal[]>([]);
@@ -105,21 +106,21 @@ export function Level2({ animals }: Level2Props) {
     if (guessedAnimal.id === currentChallengeAnimal.id) {
       setTimeout(() => {
         selectNewChallenge();
-      }, 1500); // Wait a bit before new challenge
+      }, 1500); 
     } else {
       setTimeout(() => {
-        setIsGuessing(false); // Allow guessing again after incorrect attempt
+        setIsGuessing(false); 
         setShowFeedback(null); 
       }, 1500);
     }
   };
 
   if (!currentChallengeAnimal) {
-    return <p className="text-center text-xl p-8">Загрузка викторины...</p>;
+    return <div className="flex items-center justify-center flex-grow"><p className="text-center text-xl p-8">Загрузка викторины...</p></div>;
   }
   
   return (
-    <div className="w-full max-w-4xl flex flex-col items-center">
+    <div className="w-full max-w-4xl flex flex-col items-center flex-grow">
       <h2 className="text-3xl font-headline mb-4 text-center text-primary">Уровень 2: Угадай животное</h2>
       <div className="mb-6 p-4 bg-card border rounded-lg shadow-md flex flex-col items-center">
         <p className="text-xl mb-2 text-foreground">Какое это животное?</p>
@@ -134,14 +135,15 @@ export function Level2({ animals }: Level2Props) {
         </div>
       )}
       
-      <ScrollArea className="h-[calc(100vh-350px)] w-full">
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 p-4">
+      <ScrollArea className="w-full h-full flex-grow">
+        <div className={`grid grid-cols-2 md:grid-cols-2 p-4 ${isFullscreen ? 'gap-8' : 'gap-4'}`}>
           {quizOptions.map((animal) => (
             <AnimalCard 
               key={animal.id} 
               animal={animal} 
               onClick={handleAnimalGuess} 
               disabled={isGuessing}
+              isFullscreen={isFullscreen}
             />
           ))}
         </div>
