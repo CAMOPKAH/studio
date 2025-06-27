@@ -36,6 +36,7 @@ export default function HomePage() {
       return;
     }
     try {
+      /*
       if (lock) {
         if (typeof window.screen.orientation.lock === 'function') {
           await window.screen.orientation.lock('landscape-primary');
@@ -44,7 +45,8 @@ export default function HomePage() {
         if (typeof window.screen.orientation.unlock === 'function') {
           window.screen.orientation.unlock();
         }
-      }
+      }*/
+     console.log('Comment: orentation false');
     } catch (err) {
       console.warn(`Failed to ${lock ? 'lock' : 'unlock'} screen orientation:`, err);
     }
